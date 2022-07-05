@@ -91,8 +91,17 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
   return response.status(201).json(newTask)
 });
 
-app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+app.put('/todos/:id', checksExistsUserAccount, checksExistsTodo, (request, response) => {
+  const { title, deadline } = request.body;
+  const { user, todoIndex } = request;
+
+  user.todos[todoIndex] = {
+    ...user.todos[todoIndex],
+    title,
+    deadline
+  }
+
+  return response.status(201).json(user.todos[todoIndex])
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
