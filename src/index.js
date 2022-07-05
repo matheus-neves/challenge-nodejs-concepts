@@ -26,6 +26,23 @@ function checksExistsUserAccount(request, response, next) {
   next();
 }
 
+function checksExistsTodo(request, response, next) {
+  const { id } = request.params;
+  const { user } = request;
+
+  const todoIndex = user.todos.findIndex(todo => todo.id === id)
+
+  if(todoIndex === -1) {
+    return response.status(404).send({
+      error: 'To-do not found.'
+    })
+  }
+
+  request.todoIndex = todoIndex;
+
+  next()
+}
+
 app.post('/users', (request, response) => {
   const { name, username } = request.body;
 
